@@ -22,3 +22,10 @@
 #### Added
 - Message model
 - All Message Routes
+
+
+### 2026-01-13
+
+#### Added
+- Basic frontend setup
+- Authentication Stores
