@@ -29,3 +29,4 @@
 #### Added
 - Basic frontend setup
 - Authentication Stores
+- Completed signup and login pages

@@ -8,9 +8,9 @@ export const signup = async(req,res) => {
     try {
         let {fullName,email,password} = req.body;
         // Checking If user passed all fields
-        if(!password) return res.status(400).json({message:'Password Field Cannont be Empty'})
         if(!fullName) return res.status(400).json({message:'Full Name Field Cannont be Empty'})
         if(!email) return res.status(400).json({message:'Email Field Cannont be Empty'})
+        if(!password) return res.status(400).json({message:'Password Field Cannont be Empty'})
 
         // Data normalisation for consistent data
         fullName = fullName.trim();
@@ -25,7 +25,7 @@ export const signup = async(req,res) => {
         if(user) return res.status(409).json({message:'Email already exists'})
 
         // Checking is Password is 5 characters long
-        if(password.length<5) return res.status(400).json({message:'Password Must be atleast 5 characters long'})
+        if(password.length<5) return res.status(400).json({message:'Password must be atleast 5 characters long'})
 
         // Hashing Password (To keep the users password secure)
         const salt = await bcrypt.genSalt(10);

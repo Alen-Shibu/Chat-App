@@ -1,22 +1,23 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import AuthCard from '../components/AuthCard'
 import Logo from '../components/Logo'
+import {useAuthStore} from '../store/useAuthStore.js'
 
 function SignupPage() {
-  const [form, setForm] = useState({ fullname: '', email: '', password: '' })
+  const [formData, setFormData] = useState({ fullName: '', email: '', password: '' })
+  const {signup,isSigningUp} = useAuthStore()
 
-  const handleChange = (e) => setForm((s) => ({ ...s, [e.target.name]: e.target.value }))
   const handleSubmit = (e) => {
     e.preventDefault()
-    // placeholder for submit logic
-    console.log('signup', form)
+    signup(formData)
+    console.log('signup', formData)
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-6 bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-900">
+    <div className="min-h-screen w-full flex items-center justify-center p-6 bg-linear-to-br from-slate-800 via-slate-900 to-indigo-900">
       <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <div className="hidden md:flex flex-col gap-6 pl-10 text-white">
           <Logo size="text-3xl" />
@@ -38,11 +39,28 @@ function SignupPage() {
         <div className="flex justify-center">
           <AuthCard title="Get started" subtitle="Create your free account">
             <form onSubmit={handleSubmit} className="mt-2">
-              <Input label="Full name" name="fullname" placeholder="Jane Doe" value={form.fullname} onChange={handleChange} />
-              <Input label="Email address" name="email" placeholder="you@company.com" type="email" value={form.email} onChange={handleChange} autoComplete="email" />
-              <Input label="Password" name="password" placeholder="Create a strong password" type="password" value={form.password} onChange={handleChange} autoComplete="new-password" />
+              <Input label="Full name" 
+              placeholder="Jane Doe" 
+              value={formData.fullName}
+               onChange={(e) => setFormData({...formData,fullName:e.target.value})} />
 
-              <Button type="submit" className="mt-3">Create account</Button>
+              <Input label="Email address"
+               placeholder="you@company.com" 
+               type="email"
+                value={formData.email} 
+                autoComplete="email" 
+                onChange={(e) => setFormData({...formData,email:e.target.value})} 
+                />
+
+              <Input label="Password"
+               placeholder="Create a strong password"
+                type="password" 
+                value={formData.password} 
+                autoComplete="new-password" 
+                onChange={(e) => setFormData({...formData,password:e.target.value})} 
+                />
+
+              <Button type="submit" disabled={isSigningUp} className="mt-3">{isSigningUp ? 'Creating account' : 'Create account'}</Button>
 
               <p className="text-center text-sm text-slate-300 mt-4">Already have an account? <Link to="/login" className="text-indigo-400 font-medium">Sign in</Link></p>
             </form>
