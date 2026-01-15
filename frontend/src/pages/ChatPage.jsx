@@ -10,7 +10,7 @@ function ChatPage() {
   const { activeTab, selectedUser } = useChatStore()
 
   return (
-    <div className="h-screen w-full flex bg-linear-to-br from-slate-800 via-slate-900 to-indigo-900">
+    <div className="h-screen w-full flex bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-900">
       {/* Left Sidebar */}
       <div className="w-80 flex flex-col bg-slate-900 border-r border-slate-700">
         <ProfileHeader />

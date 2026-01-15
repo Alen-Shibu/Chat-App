@@ -24,9 +24,15 @@
 - All Message Routes
 
 
-### 2026-01-13
+### 2026-01-14
 
 #### Added
 - Basic frontend setup
 - Authentication Stores
 - Completed signup and login pages
+
+
+### 2026-01-15
+
+#### Added
+- Chat Stores

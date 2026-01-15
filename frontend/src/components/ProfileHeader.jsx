@@ -1,31 +1,101 @@
-const ProfileHeader = () => {
+import { useState, useRef } from "react";
+import { LogOutIcon, VolumeOffIcon, Volume2Icon } from "lucide-react";
+import { useAuthStore } from "../store/useAuthStore";
+import { useChatStore } from "../store/useChatStore";
+
+const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
+
+function ProfileHeader() {
+  const { logout, authUser, updateProfile } = useAuthStore();
+  const { isSoundEnabled, toggleSound } = useChatStore();
+  const [selectedImg, setSelectedImg] = useState(null);
+
+  const fileInputRef = useRef(null);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onloadend = async () => {
+      const base64Image = reader.result;
+      setSelectedImg(base64Image);
+      await updateProfile({ profilePic: base64Image });
+    };
+  };
+
   return (
-    <div className="h-16 bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700 px-4 flex items-center justify-between">
+    <div className="h-20 bg-linear-to-r from-slate-800 to-slate-900 border-b border-slate-700/50 px-6 py-4 flex items-center justify-between relative z-20">
       <div className="flex items-center gap-3">
-        <img
-          src="https://via.placeholder.com/40"
-          alt="Profile"
-          className="w-10 h-10 rounded-full object-cover"
-        />
+        {/* AVATAR */}
+        <div className="relative group">
+          <button
+            className="size-14 rounded-full overflow-hidden relative ring-2 ring-indigo-500/30 hover:ring-indigo-500 transition-all"
+            onClick={() => fileInputRef.current.click()}
+          >
+            <img
+              src={selectedImg || authUser.profilePic || "/avatar.png"}
+              alt="User image"
+              className="size-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+              <span className="text-white text-xs font-medium">Change</span>
+            </div>
+          </button>
+
+          {/* ONLINE INDICATOR */}
+          <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-slate-900"></div>
+
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleImageUpload}
+            className="hidden"
+          />
+        </div>
+
+        {/* USERNAME & ONLINE TEXT */}
         <div>
-          <p className="text-white font-semibold text-sm">User Name</p>
+          <h3 className="text-white font-semibold text-sm truncate max-w-32">
+            {authUser.fullName}
+          </h3>
           <p className="text-slate-400 text-xs">Online</p>
         </div>
       </div>
-      <div className="flex items-center gap-4">
-        <button className="text-slate-400 hover:text-indigo-400 transition">
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10.5 1.5H9.5V0h1v1.5zm0 17H9.5v1.5h1V18.5zM1.5 10.5H0v-1h1.5v1zm17 0h1.5v-1H18.5v1zM3.57 3.57L2.86 2.86l-1.06 1.06.71.71 1.06-1.06zm12.86 12.86l-.71.71 1.06 1.06.71-.71-1.06-1.06zm0-12.86l1.06-1.06-.71-.71-1.06 1.06.71.71zM3.57 16.43l-1.06 1.06.71.71 1.06-1.06-.71-.71z"></path>
-          </svg>
+
+      {/* BUTTONS */}
+      <div className="flex gap-3 items-center relative z-30">
+        {/* SOUND TOGGLE BTN */}
+        <button
+          type="button"
+          className="text-slate-400 hover:text-indigo-400 transition-colors p-2 hover:bg-slate-700/50 rounded-lg cursor-pointer active:scale-95"
+          onClick={() => {
+            // play click sound before toggling
+            mouseClickSound.currentTime = 0; // reset to start
+            mouseClickSound.play().catch((error) => console.log("Audio play failed:", error));
+            toggleSound();
+          }}
+        >
+          {isSoundEnabled ? (
+            <Volume2Icon className="size-5" />
+          ) : (
+            <VolumeOffIcon className="size-5" />
+          )}
         </button>
-        <button className="text-slate-400 hover:text-red-400 transition">
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 0.82 1.82l-.5.5H13v8a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0V7H5.5l.5 .5A1 1 0 013 6zm1 10a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1v-2z" clipRule="evenodd"></path>
-          </svg>
+
+        {/* LOGOUT BTN */}
+        <button
+          type="button"
+          className="text-slate-400 hover:text-red-400 transition-colors p-2 hover:bg-slate-700/50 rounded-lg cursor-pointer active:scale-95"
+          onClick={logout}
+        >
+          <LogOutIcon className="size-5" />
         </button>
       </div>
     </div>
   );
-};
-
+}
 export default ProfileHeader;
