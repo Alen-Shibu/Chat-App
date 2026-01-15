@@ -1,40 +1,49 @@
-const ContactsList = () => {
-  const contacts = [
-    { id: 1, name: 'John Doe', status: 'Online', avatar: 'https://via.placeholder.com/40' },
-    { id: 2, name: 'Jane Smith', status: 'Offline', avatar: 'https://via.placeholder.com/40' },
-    { id: 3, name: 'Alex Johnson', status: 'Online', avatar: 'https://via.placeholder.com/40' },
-    { id: 4, name: 'Sarah Williams', status: 'Online', avatar: 'https://via.placeholder.com/40' },
-  ];
+import { useEffect } from "react";
+import { useChatStore } from "../store/useChatStore";
+import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
+import { useAuthStore } from "../store/useAuthStore";
+
+function ContactList() {
+  const { getAllContacts, allContacts, setSelectedUser, isUsersLoading } = useChatStore();
+  const { onlineUsers } = useAuthStore();
+
+  useEffect(() => {
+    getAllContacts();
+  }, [getAllContacts]);
+
+  if (isUsersLoading) return <UsersLoadingSkeleton />;
 
   return (
     <div className="flex-1 overflow-y-auto">
-      {contacts.map((contact) => (
+      {allContacts.map((contact) => (
         <div
-          key={contact.id}
+          key={contact._id}
           className="px-4 py-3 border-b border-slate-700 hover:bg-slate-800 cursor-pointer transition-colors"
+          onClick={() => setSelectedUser(contact)}
         >
           <div className="flex items-center gap-3">
             <div className="relative">
               <img
-                src={contact.avatar}
-                alt={contact.name}
+                src={contact.profilePic || "/avatar.png"}
+                alt={contact.fullName}
                 className="w-10 h-10 rounded-full object-cover"
               />
               <span
                 className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-slate-900 ${
-                  contact.status === 'Online' ? 'bg-green-500' : 'bg-slate-500'
+                  onlineUsers.includes(contact._id) ? "bg-green-500" : "bg-slate-500"
                 }`}
               ></span>
             </div>
-            <div className="flex-1">
-              <p className="text-white font-semibold text-sm">{contact.name}</p>
-              <p className="text-slate-400 text-xs">{contact.status}</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-semibold text-sm truncate">{contact.fullName}</p>
+              <p className="text-slate-400 text-xs">
+                {onlineUsers.includes(contact._id) ? "Online" : "Offline"}
+              </p>
             </div>
           </div>
         </div>
       ))}
     </div>
   );
-};
-
-export default ContactsList;
+}
+export default ContactList;

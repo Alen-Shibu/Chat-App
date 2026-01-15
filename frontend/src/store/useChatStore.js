@@ -32,7 +32,7 @@ export const useChatStore = create((set,get) => ({
         }
     },
     
-    getAllChatPartners: async() => {
+    getMyChatPartners: async() => {
         set({isUsersLoading:true})
         try {
             const res = await axiosInstance.get('/message/chats')
