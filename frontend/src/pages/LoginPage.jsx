@@ -13,7 +13,6 @@ function LoginPage() {
   const handleSubmit = (e) => {
     e.preventDefault()
     login(formData)
-    console.log('login', form)
   }
 
   return (

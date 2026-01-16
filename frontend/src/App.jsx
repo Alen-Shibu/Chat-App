@@ -19,11 +19,12 @@ const App = () => {
 
 
   return (
-    <div className="min-h-screen bg-slate-900 flex justify-center items-center p-4 relative overflow-hidden ">
+    <div className="h-dvh bg-slate-900  ">
+      <div className="overflow-hidden flex justify-center items-center relative h-full">
 
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(99,102,241,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(99,102,241,0.12)_1px,transparent_1px)]bg-size-[16px_16px]" />
+      {/* <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(99,102,241,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(99,102,241,0.12)_1px,transparent_1px)]bg-size-[16px_16px]" />
       <div className="absolute -top-24 -left-24 size-112  bg-indigo-500/20 blur-[140px]" />
-      <div className="absolute -bottom-24 -right-24 size-112 bg-teal-400/20 blur-[140px]" />
+      <div className="absolute -bottom-24 -right-24 size-112 bg-teal-400/20 blur-[140px]" /> */}
 
       <Routes>
         <Route path="/" element={authUser ? <ChatPage/> : <LoginPage />} />
@@ -32,6 +33,7 @@ const App = () => {
       </Routes>
 
       <div><Toaster/></div>
+      </div>
     </div>
   )
 }

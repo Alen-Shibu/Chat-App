@@ -6,7 +6,6 @@ function ActiveTabSwitch() {
   return (
     <div className="flex border-b border-slate-700 bg-slate-900 px-4">
       <button
-        type="button"
         onClick={() => setActiveTab("chats")}
         className={`flex-1 py-3 text-center font-medium transition-colors cursor-pointer ${
           activeTab === "chats"
@@ -18,7 +17,6 @@ function ActiveTabSwitch() {
       </button>
 
       <button
-        type="button"
         onClick={() => setActiveTab("contacts")}
         className={`flex-1 py-3 text-center font-medium transition-colors cursor-pointer ${
           activeTab === "contacts"
